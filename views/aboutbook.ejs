@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Library</title>
+        <%- include ('css') -%>
+        <!-- <link rel="stylesheet" href="public/css/style.css" type="text/css"> -->
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- MDB -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.0/mdb.min.css"
+      rel="stylesheet"
+    />
+    </head>
+<body>
+    
+    <!-- nav bar start -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light p-4">
+        <div class="container-fluid">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-mdb-toggle="collapse"
+            data-mdb-target="#navbarTogglerDemo01"
+            aria-controls="navbarTogglerDemo01"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <i class="fas fa-bars"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+            <a class="navbar-brand" href="/process_post">Add New Book</a>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/getbook">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">View All Books</a>
+              </li>
+            </ul>
+            <form class="d-flex input-group w-auto">
+              <input
+                type="search"
+                class="form-control"
+                placeholder="Search book"
+                aria-label="Search"
+              />
+              <button
+                class="btn btn-outline-primary"
+                type="button"
+                data-mdb-ripple-color="dark"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+      </nav>
+      <!-- nav bar end. -->
+
+        <div class  ="container mt-5 mb-5">
+            <div class="row">
+              <% aboutbook.forEach(function( books ){ %>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                          <img
+                            src="https://mdbootstrap.com/img/new/standard/nature/111.jpg"
+                            class="img-fluid"
+                          />
+                          <a href="#!">
+                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                          </a>
+                        </div>
+                        <div class="card-body">
+                       
+                          <h5 class="card-title">Title: <%= books.Title %> </h5>
+                         
+                        </div>
+                      </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header"> Author: <%= books.Author %></div>
+                        <div class="card-body">
+                            <h3 class="mb-2">Book Details</h3>
+                          <blockquote class="blockquote mb-0">
+                            
+                            <footer class="blockquote-footer">
+                              Someone famous in <cite title="Source Title"><%= books.Title %></cite>
+                            </footer>
+                          </blockquote>
+                        </div>
+                        <div class="card" style="width: 18rem;">
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item">PageCount: <%= books.pageCount %></li>
+                              <li class="list-group-item">Genre: <%= books.Genre %></li>
+                              <li class="list-group-item"> Date Published: <%= books.datePublished %></li>
+                              <li class="list-group-item">Publisher: <%= books.Publisher %></li>
+                              <li class="list-group-item"><a href ="/update/<%= books.bookId %>" class="btn btn-success btn-small me-2">Update</a>
+                                <a href ="/delete/<%= books.bookId %>" class="btn btn-danger btn-small">Delete</a></li>
+                            </ul>
+                          </div>
+                      </div>
+                      <% }) %>
+                </div>
+            </div>
+        </div>
+      <!-- book section end -->
+
+      <!-- footer section, -->
+
+        <!-- Footer -->
+        <footer class="text-center text-white mt-5" style="background-color: #0a4275;">
+          <!-- Grid container -->
+          <div class="container p-4 pb-0">
+            <!-- Section: CTA -->
+            <section class="">
+              <p class="d-flex justify-content-center align-items-center">
+                <span class="me-3">Home of Knowledge</span>
+                <button type="button" class="btn btn-outline-light btn-rounded">
+                  View More
+                </button>
+              </p>
+            </section>
+            <!-- Section: CTA -->
+          </div>
+          <!-- Grid container -->
+      
+          <!-- Copyright -->
+          <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+            © 2021 Copyright:
+            <a class="text-white" href="http://jerrysofttechy.com/">jerrysofttechy.com</a>
+          </div>
+          <!-- Copyright -->
+        </footer>
+        <!-- Footer -->
+</body>
+</html>
