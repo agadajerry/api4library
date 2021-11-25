@@ -16,24 +16,12 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 /* GET books. */
 router.get('/', function(req:Request, res:Response) {
 
-  res.render("home",{
-    displayBooks:books
-  });
-})//
-
-/* GET books. */
-router.get('/allbooks', function(req:Request, res:Response) {
-
-  res.render("viewallbook",{
-    displayBooks:books
-  });
+  res.status(200).send(books);
 })
 
 //posting books
 
-router.get("/post", urlencodedParser, function (req:Request, res:Response){
-  res.render("process_post");
-})
+
 router.post('/post', urlencodedParser, function (req:Request, res:Response) {  
  // Prepare output in JSON format  
 
@@ -51,16 +39,7 @@ router.post('/post', urlencodedParser, function (req:Request, res:Response) {
 
    writeDataToFile(filePath, books)
 
-   res.status(201).render("process_post",{
-      Title: req.body.title,
-      Author: req.body.author,
-      datePublished: req.body.datepublish,
-      Description: req.body.description,
-      pageCount: req.body.pagenumber,
-      Genre: req.body.genre,
-      bookId: books.length+1,
-      Publisher:req.body.publisher
-   });
+   res.status(201).send(newBook);
 
 })
 
@@ -73,13 +52,9 @@ router.get('/book/:id', function(req:Request, res:Response) {
     if(idFound){
         const returnBookId:any  = books.filter((items:any)=>items.bookId
         == parseInt(req.params.id)); 
-        // res.json(returnBookId);
-        res.render("aboutbook",{
 
-          aboutbook:returnBookId
-        })
-    }else{
-        res.status(404).json({msg:` the Book with ID No:  ${req.params.id}  not found...`})
+        res.status(200).json(returnBookId);
+       
     }
   
     });
@@ -108,20 +83,17 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
             writeDataToFile(filePath,books);
 
-                    res.status(200).json({msg: `The book  with ID ${req.params.id} is updated`})
+              res.status(200).json({msg: `The book  with ID ${req.params.id} is updated`})
                  }
-                //  }else{
+                 else{
 
-                //     res.status(404).json({msg:`Book details not updated...`});  
-                //  }
+                    res.status(404).json({msg:`Book details not updated...`});  
+                 }
              })
          }
     })
 
     //delete books
-    var urlencodedParser = bodyParser.urlencoded({ extended: false }) 
-
-    router.get("/delete/:id", urlencodedParser, function (req:Request, res:Response){res.render("delete")})
 
     router.delete("/delete/:id",(req:Request,res:Response)=>{
 
@@ -136,7 +108,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
             books = books.filter((bk:any)=>bk.bookId!= parseInt(req.params.id))
             writeDataToFile(filePath, books);
-            res.send(writeDataToFile(filePath, books))
+            res.status(200).send({msg: `book with is removed`})
             
           
        

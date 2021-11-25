@@ -48,7 +48,7 @@
                 <a class="nav-link active" aria-current="page" href="/">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/allbooks">View All Books</a>
+                <a class="nav-link" href="allbooks">View All Books</a>
               </li>
             </ul>
             <form class="d-flex input-group w-auto">
@@ -72,53 +72,46 @@
       <!-- nav bar end. -->
 
         <div class  ="container mt-5 mb-5">
+
+            <h2 class="text-center mb-5" style="color:teal">List Of All Books </h2>
             <div class="row">
-              <% aboutbook.forEach(function( books ){ %>
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-                          <img
-                            src="https://mdbootstrap.com/img/new/standard/nature/111.jpg"
-                            class="img-fluid"
-                          />
-                          <a href="#!">
-                            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-                          </a>
-                        </div>
-                        <div class="card-body">
-                       
-                          <h5 class="card-title">Title: <%= books.Title %> </h5>
-                         
-                        </div>
-                      </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card">
-                        <div class="card-header"> Author: <%= books.Author %></div>
-                        <div class="card-body">
-                            <h3 class="mb-2">Book Details</h3>
-                          <blockquote class="blockquote mb-0">
-                            
-                            <footer class="blockquote-footer">
-                              Someone famous in <cite title="Source Title"><%= books.Title %></cite>
-                            </footer>
-                          </blockquote>
-                        </div>
-                        <div class="card" style="width: 18rem;">
-                            <ul class="list-group list-group-flush">
-                              <li class="list-group-item">PageCount: <%= books.pageCount %></li>
-                              <li class="list-group-item">Genre: <%= books.Genre %></li>
-                              <li class="list-group-item"> Date Published: <%= books.datePublished %></li>
-                              <li class="list-group-item">Publisher: <%= books.Publisher %></li>
-                              <li class="list-group-item"><a href ="/update/<%= books.bookId %>" class="btn btn-success btn-small me-2">Update</a>
-                                <a href ="/delete/<%= books.bookId %>" class="btn btn-danger btn-small">Delete</a></li>
-                            </ul>
-                          </div>
-                      </div>
-                      <% }) %>
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Genre</th>
+                    <th scope="col">PageCount</th>
+                    <th scope="col">Publisher</th>
+                    <th scope="col">Published Date</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                    <% displayBooks.forEach(function( books ){ %>
+                        <tr>
+                        <td><%= books.Title %></td>
+                        <td><%= books.Author %></td>
+                        <td><%= books.Genre %></td>
+                        <td><%= books.pageCount %></td>
+                        <td><%= books.Publisher %></td>
+                        <td><%= books.datePublished %></td>
+                        <td> <a href="book/<%= books.bookId%>" class="btn btn-primary btn">Book Details</a></td>
+                      </tr>
+                      </tr>
+
+                        <% }) %>
+                </tbody>
+              </table>
+            </div>
+        <div class="col-md-1"></div>
+
                 </div>
             </div>
-        </div>
+        
       <!-- book section end -->
 
       <!-- footer section, -->

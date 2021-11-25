@@ -11,12 +11,9 @@ import bodyparser from "body-parser"
 // import cors from "cors";
 
 // import  indexRouter  from './routes/index';
-import homeRouter  from './routes/home';
-import usersRouter  from './routes/aboutbook';
+
 import books from  './routes/books';
-import process_post from  './routes/post_process';
-import getbooks from  './routes/getBooks';
-import deletebook from  './routes/delete';
+import bookapi from  './routes/bookapi';
 
 const app = express();
 
@@ -31,12 +28,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // app.use(cors);//cross origin resoures sharing
 
-
-app.use('/aboutbook', books);
-// app.use('/aboutbook', usersRouter);
-app.use('/process_post', process_post);
-app.use('/getbook', getbooks);
-app.use('/delete', deletebook);
+//routing for various pages
+app.use('/', books);// comment this during testing
+app.use('/bookapi', bookapi);
 
 // catch 404 and forward to error handler
 app.use(function(err:any, req:Request, res:Response, next:NextFunction) {
