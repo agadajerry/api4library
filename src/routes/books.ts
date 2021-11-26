@@ -10,6 +10,7 @@ let books  = require("../../src/routes/appdata/db.json")
 const filePath = path.join(__dirname, "../../src/routes/appdata/db.json");
 
 var urlencodedParser = bodyParser.urlencoded({ extended: false }) 
+let returnBookId:any
 
 // 
 
@@ -71,7 +72,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
     const idFound =  books.some((bs:any)=>bs.bookId === parseInt(req.params.id))
     if(idFound){
-        const returnBookId:any  = books.filter((items:any)=>items.bookId
+         returnBookId  = books.filter((items:any)=>items.bookId
         == parseInt(req.params.id)); 
         // res.json(returnBookId);
         res.render("aboutbook",{
@@ -86,14 +87,29 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
 
     //update books details
-    router.put("/update/:id",(req:Request,res:Response,next:NextFunction)=>{
+
+    router.get("/update/:id", urlencodedParser, function (req:Request, res:Response){
+
+      const idF =  books.some((bs:any)=>bs.bookId === parseInt(req.params.id)); 
+      if(idF){
+           const returnBook  = books.filter((items:any)=>items.bookId
+          == parseInt(req.params.id)); 
+          res.render("update",{
+            bookupdate:returnBook
+          })
+      }
+    })
+    router.put("/update/:id",(req:Request,res:Response)=>{
         const foundBk  = books.find((bid:any)=>bid.bookId
          ===parseInt(req.params.id))
          if(foundBk){
 
+        
+
              const updateBook =  req.body;
              books.forEach((bk:any)=>{
-                 if(bk.bookId === parseInt(req.params.id)){
+              
+              if(bk.bookId === parseInt(req.params.id)){
 
             bk.Title = updateBook.title ? updateBook.Title:bk.Title,
             bk.Author = updateBook.Author ? updateBook.Author:bk.Author,
@@ -108,7 +124,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
             writeDataToFile(filePath,books);
 
-                    res.status(200).json({msg: `The book  with ID ${req.params.id} is updated`})
+                    res.status(200).render("update");
                  }
                 //  }else{
 
@@ -119,7 +135,6 @@ router.get('/book/:id', function(req:Request, res:Response) {
     })
 
     //delete books
-    var urlencodedParser = bodyParser.urlencoded({ extended: false }) 
 
     router.get("/delete/:id", urlencodedParser, function (req:Request, res:Response){res.render("delete")})
 
@@ -136,7 +151,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
             books = books.filter((bk:any)=>bk.bookId!= parseInt(req.params.id))
             writeDataToFile(filePath, books);
-            res.send(writeDataToFile(filePath, books))
+            res.render("delete");
             
           
        

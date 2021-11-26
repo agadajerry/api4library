@@ -1,23 +1,12 @@
 [
     {
-        "Title": "Python Programming Course",
-        "Author": "Francisco Mendes ",
-        "datePublished": "Jul 19",
-        "description": "My Python is here",
-        "pageCount": 324,
-        "Genre": "Sundny",
-        "bookId": 3,
-        "Publisher": "jA"
-    },
-    {
-        "Title": "Live of christ",
-        "Author": "James Ameh ",
-        "datePublished": "Jul 19",
-        "description": "My description is here",
-        "pageCount": 100,
-        "Genre": "Samuel",
-        "bookId": 4,
-        "Publisher": "Frank"
+        "Title": "Tom and jerry",
+        "Author": "cartton",
+        "datePublished": "2021-11-26",
+        "Description": "df",
+        "pageCount": "43",
+        "Genre": "idoko",
+        "bookId": 1,
+        "Publisher": "agada"
     }
-    
 ]

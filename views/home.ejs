@@ -93,9 +93,12 @@
       <!-- book section -->
       <section class="container  mb-5 mt-5">
           <div class ="row">
+            <% if(displayBooks.length===0){ %>
+              <h3 class="text-center" style="color:teal; font-size:23">The Library is empty</h3>
+              <%}%>
             <% displayBooks.forEach(function( books ){ %>
               <div class="col-md-3">
-                <div class="card">
+                <div class="card text-center">
                     <div class="bg-image hover-overlay ripple text-center" data-mdb-ripple-color="light">
                       <img
                         src="https://th.bing.com/th/id/R.7c5fcd9c1f7e69edc4d929ff4c1c841d?rik=4eogQrQfY%2b9JBA&pid=ImgRaw&r=0"

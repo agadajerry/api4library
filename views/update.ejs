@@ -12,12 +12,7 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
     rel="stylesheet"
   />
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-    rel="stylesheet"
-  />
-  </head>
+</head>
 <body>
     
     <!-- nav bar start -->
@@ -69,26 +64,30 @@
                 <div class="col-md-3"></div>
                 <div class="col-md-6">
               <div class="container mb-5">
-                <h3 class="text-center" style="font-size: 30px; color:teal">Post New Book</h3>
+                <h3 class="text-center" style="font-size: 30px; color:teal">Update Book Details</h3>
               </div>
-          <form method="POST" id="form"  action="">
+           
+          <form method="PUT" id="form"  action="">
+
+            <% bookupdate.forEach(function( books ){ %>
+
             <!-- Name input -->
             <div class="form-outline mb-4">
-                <input type="text" id="title" class="form-control" name="title" />
+                <input type="text" value="<%= books.Title %>" id="title" class="form-control" name="title" />
                 <label class="form-label" for="title">Book Title</label>
             </div>
 
-            <!--Varieties of books-->
+            <!--boo update form-->
             <div class="row mb-4">
                 <div class="col">
                   <div class="form-outline">
-                    <input type="text" id="author" class="form-control"  name="author"/>
+                    <input type="text"value="<%= books.Author %>"  id="author" class="form-control"  name="author"/>
                     <label class="form-label" for="author">Author's Name</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-outline">
-                    <input type="number" id="pagenumber" class="form-control" name="pagenumber"/>
+                    <input type="number"value="<%= books.pageCount %>"  id="pagenumber" class="form-control" name="pagenumber"/>
                     <label class="form-label" for="pagenumber">Page Number</label>
                   </div>
                 </div>
@@ -96,13 +95,13 @@
               <div class="row mb-4">
                 <div class="col">
                   <div class="form-outline">
-                    <input type="text" id="genre" class="form-control"  name="genre"/>
+                    <input type="text" value="<%= books.Genre %>"  id="genre" class="form-control"  name="genre"/>
                     <label class="form-label" for="genre">Genre</label>
                   </div>
                 </div>
                 <div class="col">
                   <div class="form-outline">
-                    <input type="text" id="publisher" class="form-control"  name="publisher"/>
+                    <input type="text" value="<%= books.Publisher %>"  id="publisher" class="form-control"  name="publisher"/>
                     <label class="form-label" for="publisher">Publisher</label>
                   </div>
                 </div>
@@ -118,12 +117,15 @@
 
             <!-- Message input -->
             <div class="form-outline mb-4">
-                <textarea class="form-control" id="description" rows="4" name="description"></textarea>
+                <textarea class="form-control" id="description" rows="4" name="description">
+                    <%= books.Description %>
+                </textarea>
                 <label class="form-label" for="description">Description</label>
             </div>
             <!-- Submit button -->
-        <button type="submit" class="btn btn-primary btn-block mb-4" id="submitbtn"
-         style="width: 100%;">Add New Book</button>
+        <a  href ="/update/<%= books.bookId %>" data-id ="<%= books.bookId %>" class="btn btn-primary btn-block mb-4" id="submitbtn"
+         style="width: 100%;">Update</a>
+         <%})%>
             </form>
                 </div>
                 <div class="col-md-3"></div>
@@ -149,7 +151,6 @@
             </section>
             <!-- Section: CTA -->
           </div>
-          <!-- Grid container -->
       
           <!-- Copyright -->
           <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
@@ -160,8 +161,33 @@
         </footer>
         <!-- Footer -->
         <script
-type="text/javascript"
-src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.0/mdb.min.js"
-></script>
+        type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.0/mdb.min.js"
+        ></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', async function(){
+              console.log('loaded2')
+              const getAllAnchor = document.querySelectorAll('a')
+              getAllAnchor.forEach((item) =>{
+                if(item.innerText.trim().toLocaleLowerCase() === 'Update'){
+                  console.log('registered')
+                  item.addEventListener('click', updateData)
+                }
+              })
+              //
+
+              async function updateData(e){
+              // e.preventDefault()
+              const id = e.target.dataset.id
+              const updated = await fetch(`/update/${id}`, {
+                  
+                method: 'PUT'
+              })
+              console.log(updated)
+              e.addEventListener('click',updateData)
+            
+            }
+            })
+              </script>
 </body>
 </html>

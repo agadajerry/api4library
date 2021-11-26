@@ -111,7 +111,7 @@
                               <li class="list-group-item"> Date Published: <%= books.datePublished %></li>
                               <li class="list-group-item">Publisher: <%= books.Publisher %></li>
                               <li class="list-group-item"><a href ="/update/<%= books.bookId %>" class="btn btn-success btn-small me-2">Update</a>
-                                <a href ="/delete/<%= books.bookId %>" class="btn btn-danger btn-small">Delete</a></li>
+                                <a href ="/delete/<%= books.bookId %>" class="btn btn-danger btn-small" data-id="<%= books.bookId %>">Delete</a></li>
                             </ul>
                           </div>
                       </div>
@@ -148,5 +148,32 @@
           <!-- Copyright -->
         </footer>
         <!-- Footer -->
+
+        <script
+type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.0/mdb.min.js"
+></script>
+        <script>
+          window.addEventListener('DOMContentLoaded', async function(){
+            console.log('loaded')
+            const getAllAnchor = document.querySelectorAll('a')
+            getAllAnchor.forEach((item) =>{
+              if(item.innerText.trim().toLocaleLowerCase() === 'delete'){
+                console.log('registered')
+                item.addEventListener('click', deleteData)
+              }
+            })
+
+            async function deleteData(e){
+              // e.preventDefault()
+              const id = e.target.dataset.id
+              const deleted = await fetch(`/delete/${id}`, {
+                method: 'DELETE'
+              })
+              console.log(deleted)
+              e.removeEventListener('click',deleteData)
+            }
+          })
+        </script>
 </body>
 </html>
