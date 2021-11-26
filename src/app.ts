@@ -17,7 +17,7 @@ import bookapi from  './routes/bookapi';
 
 const app = express();
 
-app.use(cors);//cross origin resoures sharing
+// app.use(cors);//cross origin resoures sharing
 
 app.set("view engine","ejs");
 // view engine setup
