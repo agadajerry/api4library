@@ -3,24 +3,50 @@ import  fs  from "fs";
 var bodyParser = require('body-parser');
 const router = express.Router();
 import path from "path";
+import {validateInput} from "../routes/validateData"
+let  flash  =   require("connect-flash");
+let session  =  require("express-session")
+const {v4: uuidv4}  = require("uuid");
+import {authoriseUser} from "./authMiddleware";
 
 
-let books  = require("../../src/routes/appdata/db.json")
+
+let books = require("../../src/routes/appdata/db.json");
+
+
+
+
+
 //
 const filePath = path.join(__dirname, "../../src/routes/appdata/db.json");
 
-var urlencodedParser = bodyParser.urlencoded({ extended: false }) 
+// let books:any =  readDb(book);
+
+// var urlencodedParser = bodyParser.urlencoded({ extended: false }) 
+
 let returnBookId:any
 
 // 
 
-/* GET books. */
-router.get('/', function(req:Request, res:Response) {
+// session and flash views
+router.use(session({
+  secret: 'jerrysoft',
+  cookie: {maxAge:6000},
+  resave: false,
+  saveUninitialized: false
+}));
+router.use(flash())
 
+
+
+
+/* GET books. */
+router.get('/dashboard',authoriseUser, function(req:Request, res:Response) {
   res.render("home",{
     displayBooks:books
-  });
-})//
+  })
+   
+});
 
 /* GET books. */
 router.get('/allbooks', function(req:Request, res:Response) {
@@ -32,37 +58,42 @@ router.get('/allbooks', function(req:Request, res:Response) {
 
 //posting books
 
-router.get("/post", urlencodedParser, function (req:Request, res:Response){
-  res.render("process_post");
+router.get("/post", function (req:Request, res:Response){
+  res.render("process_post",{
+    message: req.flash("message"),
+    messageerror: req.flash("messageerror"),
+  });
 })
-router.post('/post', urlencodedParser, function (req:Request, res:Response) {  
+router.post('/post', async function (req:Request, res:Response) {  
  // Prepare output in JSON format  
-
+try{
  const newBook = {
-  Title: req.body.title,
-  Author: req.body.author,
+  title: req.body.title,
+  author: req.body.author,
   datePublished: req.body.datepublish,
-  Description: req.body.description,
+  description: req.body.description,
   pageCount: req.body.pagenumber,
-  Genre: req.body.genre,
+  genre: req.body.genre,
   bookId: books.length+1,
-  Publisher:req.body.publisher
+  publisher:req.body.publisher,
+  imageUrl:req.body.image
 }
-   books.push(newBook);
+
+  //validate incoming data
+  const validateData = await validateInput(newBook);
+
+   books.push(validateData);
 
    writeDataToFile(filePath, books)
 
-   res.status(201).render("process_post",{
-      Title: req.body.title,
-      Author: req.body.author,
-      datePublished: req.body.datepublish,
-      Description: req.body.description,
-      pageCount: req.body.pagenumber,
-      Genre: req.body.genre,
-      bookId: books.length+1,
-      Publisher:req.body.publisher
-   });
+   req.flash('message', ' Book details saved successfully...');
 
+  res.redirect("/post")
+}catch(err){
+  console.log(err);  
+  req.flash("messageerror", "Input field is incomplete... ")
+  res.redirect("/post")
+}
 })
 
 
@@ -88,7 +119,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
     //update books details
 
-    router.get("/update/:id", urlencodedParser, function (req:Request, res:Response){
+    router.get("/update/:id", function (req:Request, res:Response){
 
       const idF =  books.some((bs:any)=>bs.bookId === parseInt(req.params.id)); 
       if(idF){
@@ -111,32 +142,33 @@ router.get('/book/:id', function(req:Request, res:Response) {
               
               if(bk.bookId === parseInt(req.params.id)){
 
-            bk.Title = updateBook.title ? updateBook.Title:bk.Title,
-            bk.Author = updateBook.Author ? updateBook.Author:bk.Author,
+            bk.title = updateBook.title ? updateBook.title:bk.title,
+            bk.author = updateBook.author ? updateBook.author:bk.author,
             bk.datePublished = updateBook.datePublished ? updateBook.datePublished : bk.datePublished,
-            bk.Description = updateBook.description ? updateBook.Description : bk.Description,
+            bk.description = updateBook.description ? updateBook.description : bk.description,
             bk.pageCount = updateBook.pageCount ? updateBook.pageCount:bk.PageCount,
-            bk.Genre = updateBook.Genre ? updateBook.Genre : bk.Genre,
-            bk.Publisher = updateBook.Publisher ? updateBook.Publisher : bk.Publisher
+            bk.genre = updateBook.genre ? updateBook.genre : bk.genre,
+            bk.publisher = updateBook.publisher ? updateBook.publisher : bk.publisher,
+            bk.imageUrl = updateBook.imageUrl ? updateBook.imageUrl : bk.imageUrl
 
             
-            books.push(updateBook);
+            // books:updateBook;
 
             writeDataToFile(filePath,books);
+            res.status(200).redirect("/allbooks")
 
-                    res.status(200).render("update");
                  }
-                //  }else{
+                 else{
 
-                //     res.status(404).json({msg:`Book details not updated...`});  
-                //  }
+                    res.status(404).json({msg:`Book details not updated...`});  
+                 }
              })
          }
     })
 
     //delete books
 
-    router.get("/delete/:id", urlencodedParser, function (req:Request, res:Response){res.render("delete")})
+    router.get("/delete/:id", function (req:Request, res:Response){res.render("delete")})
 
     router.delete("/delete/:id",(req:Request,res:Response)=>{
 
@@ -157,7 +189,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
        
   
       })
-    // write file function
+    // write to a file function
     function writeDataToFile(filep:any,content:any){
 
         fs.writeFile(filep, JSON.stringify(content,null,4),  err=>{
@@ -167,6 +199,22 @@ router.get('/book/:id', function(req:Request, res:Response) {
     })
   }
 
+
+  function readDb(filePat:string){
+    try{
+      fs.readFile(filePat,{encoding:"utf-8"},(err,data)=>{
+        if(err) return console.log("no file to read from...");
+        const book =  JSON.parse(data);
+
+        return book;
+      })
+    }catch(err){
+
+      console.log(err);
+      
+    }
+   
+  }
 export default  router;
 
 

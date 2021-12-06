@@ -3,6 +3,8 @@ import  fs  from "fs";
 var bodyParser = require('body-parser');
 const router = express.Router();
 import path from "path";
+import {authoriseUser} from "./authMiddleware";
+
 
 
 let books  = require("../../src/routes/appdata/db.json")
@@ -14,7 +16,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 // 
 
 /* GET books. */
-router.get('/', function(req:Request, res:Response) {
+router.get('/', authoriseUser, function(req:Request, res:Response) {
 
   res.status(200).send(books);
 })
@@ -62,24 +64,21 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
     //update books details
     router.put("/update/:id",(req:Request,res:Response,next:NextFunction)=>{
-        const foundBk  = books.find((bid:any)=>bid.bookId
-         ===parseInt(req.params.id))
-         if(foundBk){
 
              const updateBook =  req.body;
-             books.forEach((bk:any)=>{
+             books.filter((bk:any)=>{
                  if(bk.bookId === parseInt(req.params.id)){
 
-            bk.Title = updateBook.title ? updateBook.Title:bk.Title,
-            bk.Author = updateBook.Author ? updateBook.Author:bk.Author,
+            bk.title = updateBook.title ? updateBook.title:bk.Title,
+            bk.author = updateBook.author ? updateBook.author:bk.author,
             bk.datePublished = updateBook.datePublished ? updateBook.datePublished : bk.datePublished,
-            bk.Description = updateBook.description ? updateBook.Description : bk.Description,
-            bk.pageCount = updateBook.pageCount ? updateBook.pageCount:bk.PageCount,
-            bk.Genre = updateBook.Genre ? updateBook.Genre : bk.Genre,
-            bk.Publisher = updateBook.Publisher ? updateBook.Publisher : bk.Publisher
+            bk.description = updateBook.description ? updateBook.description : bk.description,
+            bk.pageCount = updateBook.pageCount ? updateBook.pageCount:bk.pageCount,
+            bk.genre = updateBook.genre ? updateBook.genre : bk.genre,
+            bk.publisher = updateBook.publisher ? updateBook.publisher : bk.publisher
 
             
-            books.push(updateBook);
+            books: updateBook;
 
             writeDataToFile(filePath,books);
 
@@ -90,7 +89,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
                     res.status(404).json({msg:`Book details not updated...`});  
                  }
              })
-         }
+        
     })
 
     //delete books

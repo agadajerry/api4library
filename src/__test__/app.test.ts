@@ -3,11 +3,18 @@ import supertest from 'supertest'
 import app from '../app'
 
 
+// let book;
 //test for GET
-describe('GET /bookapi/book/3', () => {
-  test('GET /bookapi/book/40', (done) => {
+describe('GET /bookapi/book/1', () => {
+  test('GET /bookapi/book/1', (done) => {
+    // const response = await supertest(app).post('/books').send({
+    //   title: "",
+    //   author: ""
+    // })
+
+    // book = response.body.data
     supertest(app)
-      .get('/bookapi/book/3')
+      .get(`/bookapi/book/1`)
       .expect('Content-Type', /json/)
       .expect(200)
       .expect((res) => {
@@ -27,7 +34,7 @@ describe('GET /bookapi/book/3', () => {
   //test for put
   test('PUT /', (done) => {
     supertest(app)
-      .put(`/bookapi/update/42`)
+      .put(`/bookapi/update/1`)
       .expect('Content-Type', /json/)
       .send({
         Title: "Solidity Course",
@@ -80,7 +87,7 @@ describe('GET /bookapi/book/3', () => {
 // //   //test for delete
   test('DELETE /', (done) => {
     supertest(app)
-      .delete('/bookapi/delete/43')
+      .delete('/bookapi/delete/1')
       .expect('Content-Type', /json/)
       .send({
         Title: "PHP Programming Course",
