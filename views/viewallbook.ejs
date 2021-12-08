@@ -24,7 +24,9 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/script/css.css" type="text/css">
-    </head>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" type="textx/css">
+
+  </head>
   <body>
     <!-- vertical menu -->
 
@@ -48,7 +50,7 @@
         <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-10">
-        <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover" id="mytable">
             <thead>
               <tr>
                 <th scope="col">Title</th>
@@ -87,8 +89,17 @@
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.0/umd/popper.min.js"></script>
     <script src = "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> 
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
     <!-- toggle file-->
     <script src ="/script/toggle.js"></script>
+
+    <script>
+      $(document).ready(function() {
+    $('#mytable').DataTable();
+} );
+    </script>
   </body>
   
 </html>

@@ -15,7 +15,6 @@ const {v4: uuidv4}  = require("uuid");
 
 
 let usersFilePath:string  =  path.join(__dirname,"../../src/routes/appdata/auth.json");
-let urlencodedParser = bodyParser.urlencoded({ extended: false }) 
 
 
 const router = express.Router();
@@ -42,17 +41,24 @@ router.use(session({
 //--------------- registration of new user -----------------------
 
 
-router.get("/register",urlencodedParser, (req:Request, res:Response)=>{
+router.get("/register", (req:Request, res:Response)=>{
     res.render("register",{
      message:   req.flash("message"),
-     messageerror: req.flash("messageerror")
+     messageerror: req.flash("messageerror"),
+     password_miss: req.flash("password_miss")
     });
 })
-router.post('/register',urlencodedParser,async (req:Request,res:Response) => {
+router.post('/register',async (req:Request,res:Response) => {
 
     try{
 
+        if( req.body.rep_password !== req.body.password){
+            req.flash('password_miss', 'Password Mismatched...');
+           res.redirect("/register")
+           return
+            }
         
+
         //check for empty fields
 
         if(!req.body.fullname||!req.body.email
@@ -85,6 +91,7 @@ router.post('/register',urlencodedParser,async (req:Request,res:Response) => {
 
                 const password = req.body.password;
                 const hashpassword =  await bcrypt.hash(password,10);
+
 
                 const newReg =   {
                 serialNo: uuidv4(),
@@ -142,11 +149,12 @@ router.post('/', (req:Request, res:Response)=>{
     const password = req.body.password;
 
   
-    if(!req.body.email.trim().length || !req.body.password.length){
+    if(!email || !password.length){
         req.flash('message', ' Invalid login credentials. Try again..');
         res.redirect("/")
         return
     }
+
      //check if user exist or not
      fs.readFile(usersFilePath,{encoding:"utf-8"}, async (err,data)=>{
         if(err) return new Error(JSON.stringify({msg:'No such files exist'}))

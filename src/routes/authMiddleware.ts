@@ -4,7 +4,7 @@ const jwt  = require("jsonwebtoken");
 
 
 
- export   function authoriseUser(req:Request, res:Response,next:NextFunction){
+ export function authoriseUser(req:Request, res:Response,next:NextFunction){
 
 try{
    

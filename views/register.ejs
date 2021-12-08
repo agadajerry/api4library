@@ -63,6 +63,15 @@
                         <label class="form-label" for="password">Password</label>
                           <input type="password" id="password" class="form-control" name="password" />
                         </div>
+
+                        <!--repeat password-->
+                        <div class="form-outline mb-4"> 
+                          <label class="form-label" for="rep_password">Repeat Password</label>
+                            <input type="password" id="rep_password" class="form-control" name ="rep_password" />
+                            <% if(password_miss.length>0){%>
+                            <p class=" alert alert-danger"><%= password_miss %></p>
+                            <%}%>
+                          </div>
                       
                       
                         <!-- Submit button -->
@@ -99,6 +108,9 @@
 
         location.reload;
       }
+
+
+
     </script>
     
 </body>

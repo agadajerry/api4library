@@ -49,7 +49,7 @@ router.get('/dashboard',authoriseUser, function(req:Request, res:Response) {
 });
 
 /* GET books. */
-router.get('/allbooks', function(req:Request, res:Response) {
+router.get('/allbooks',authoriseUser, function(req:Request, res:Response) {
 
   res.render("viewallbook",{
     displayBooks:books
@@ -58,13 +58,13 @@ router.get('/allbooks', function(req:Request, res:Response) {
 
 //posting books
 
-router.get("/post", function (req:Request, res:Response){
+router.get("/post",authoriseUser, function (req:Request, res:Response){
   res.render("process_post",{
     message: req.flash("message"),
     messageerror: req.flash("messageerror"),
   });
 })
-router.post('/post', async function (req:Request, res:Response) {  
+router.post('/post',authoriseUser, async function (req:Request, res:Response) {  
  // Prepare output in JSON format  
 try{
  const newBook = {
@@ -99,7 +99,7 @@ try{
 
 /* GET book by id . */
 
-router.get('/book/:id', function(req:Request, res:Response) {
+router.get('/book/:id',authoriseUser, function(req:Request, res:Response) {
 
     const idFound =  books.some((bs:any)=>bs.bookId === parseInt(req.params.id))
     if(idFound){
@@ -119,7 +119,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
     //update books details
 
-    router.get("/update/:id", function (req:Request, res:Response){
+    router.get("/update/:id",authoriseUser, function (req:Request, res:Response){
 
       const idF =  books.some((bs:any)=>bs.bookId === parseInt(req.params.id)); 
       if(idF){
@@ -130,7 +130,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
           })
       }
     })
-    router.put("/update/:id",(req:Request,res:Response)=>{
+    router.put("/update/:id",authoriseUser,(req:Request,res:Response)=>{
         const foundBk  = books.find((bid:any)=>bid.bookId
          ===parseInt(req.params.id))
          if(foundBk){
@@ -168,7 +168,7 @@ router.get('/book/:id', function(req:Request, res:Response) {
 
     //delete books
 
-    router.get("/delete/:id", function (req:Request, res:Response){res.render("delete")})
+    router.get("/delete/:id",authoriseUser, function (req:Request, res:Response){res.render("delete")})
 
     router.delete("/delete/:id",(req:Request,res:Response)=>{
 
